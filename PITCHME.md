@@ -1,15 +1,9 @@
-# Test generation
+# Testing
 
 ---
 
-### Types of test generation
-
-* Code based: code coverage
-* Model based: model provides inputs and outputs
-
----
-
-### Can they be combined?
+## Writing tests is annoying.
+## Can we generate them?
 
 ---
 
@@ -233,7 +227,7 @@ produces
 
 ### Test template
 
-With the help of another type of generator (let's all it `TestTemplate`) we can generate arbitrary test functions.
+With the help of another type of generator we can generate arbitrary test functions.
 
 ```c++
 int myfunc(int x) {
@@ -276,3 +270,7 @@ void test_myfunc_2() {
 }
 ```
 
+---
+
+## Writing generators is annoying.
+## Can we generate them?
