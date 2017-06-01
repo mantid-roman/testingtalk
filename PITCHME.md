@@ -99,3 +99,78 @@ gen.addInput("x", new DoubleList({2, -1}));
 }
 ```
 
+---
+
+### Define preconditions
+
+```c++
+// Unexpected handling of bad input
+double mysqrt(double x) {
+  if (x < 0.0) {
+    return 0.0;
+  }
+  return sqrt(x);
+}
+// Specify pre-conditions via EXPECT
+void run_mysqtr(const Inputs &inp, Outputs &out) {
+  double x = inp["x"];
+  EXPECT(x >= 0, out, "x cannot be negative");
+  double y = mysqrt(x);
+  out["y"] = y;
+}
+```
+
+---
+
+### Generated test
+
+```c++
+{ // test 2
+  Inputs inp = gen.getInputs();
+  // inp["x"] = -1;
+  // expected errors:
+  //     x cannot be negative
+  run_mysqtr(inp, out);
+  // Errors expected but no exception was thrown.
+  TS_ASSERT_EQUALS(out["y"], 0.0000000000000000e+00);
+  gen.next();
+}
+```
+
+---
+
+### Checking post-conditions
+
+```c++
+double mysqrt(double x) {
+  if (x < 0.0) {
+    throw std::runtime_error("Negative argument");
+  }
+  return -sqrt(x);
+}
+
+void run_mysqtr(const Inputs &inp, Outputs &out) {
+  double x = inp["x"];
+  EXPECT(x >= 0, out, "x cannot be negative");
+  double y = mysqrt(x);
+  out["y"] = y;
+  EXPECT(y >= 0, out, "Return value cannot be negative");
+}
+```
+
+---
+
+### Generated test
+
+```c++
+{ // test 1
+  Inputs inp = gen.getInputs();
+  // inp["x"] = 2;
+  // expected errors:
+  //     Return value cannot be negative
+  run_mysqtr(inp, out);
+  // Errors expected but no exception was thrown.
+  TS_ASSERT_EQUALS(out["y"], -1.4142135623730951e+00);
+  gen.next();
+}
+```
