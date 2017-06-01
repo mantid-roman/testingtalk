@@ -189,15 +189,45 @@ Multiple inputs can be combined in all combinations. Setting
 ```
 will produce all pairs of `a` and `b`:
 
-    // inp["a"] = 1;
-    // inp["b"] = -1;
-    ...
-    // inp["a"] = 2;
-    // inp["b"] = -1;
-    ...
-    // inp["a"] = 1;
-    // inp["b"] = -2;
-    ...
-    // inp["a"] = 2;
-    // inp["b"] = -2;
+    (1, -1), (2, -1), (1, -2), (2, -2)
 
+---
+
+### Input generation: single input change
+
+If the inputs are independent there is no need to test all their combinations.
+
+Changing one variable at a time could be enough.
+
+```c++
+  Generator gen;
+  gen.setInputGenerationMethod(InputGenerator::SingleInput);
+  gen.addInput("a", new IntList({1, 2, 3}));
+  gen.addInput("b", new IntList({-1, -2, -3}));
+```
+produces
+
+    (1, -1), (2, -1), (3, -1) // change a while b const
+    (1, -2), (1, -3)          // change b while a const
+
+---
+
+### Input generation: tuples
+
+Strongly correlated inputs can be put into tuples.
+
+```c++
+  Generator gen;
+  gen.setInputGenerationMethod(InputGenerator::DirectProduct);
+  gen.setTuple(
+      {gen.addInput("names", new StringArrayList({{"1st"}, {"1st", "2nd"}})),
+       gen.addInput("values",   new IntArrayList({{10},    {20,    30}}))});
+  gen.addInput("b", new IntList({1, 2}));
+```
+produces
+
+    ({"1st"}, {10}, 1), ({"1st", "2nd"}, {20, 30}, 1),
+    ({"1st"}, {10}, 2), ({"1st", "2nd"}, {20, 30}, 2)
+    
+    
+    
