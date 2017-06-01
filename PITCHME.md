@@ -187,7 +187,7 @@ will produce all pairs of `a` and `b`:
 
 ---
 
-### Input generation: single input change
+### Single input change
 
 If the inputs are independent there is no need to test all their combinations.
 
@@ -206,7 +206,7 @@ produces
 
 ---
 
-### Input generation: tuples
+### Tuples
 
 Strongly correlated inputs can be put into tuples.
 
@@ -273,4 +273,4 @@ void test_myfunc_2() {
 ---
 
 ## Writing generators is annoying.
-## Can we generate them?
+## Can we generate them?..
