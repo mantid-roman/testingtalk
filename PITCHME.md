@@ -1,8 +1,8 @@
-# Testing
+# Test generation
 
 ---
 
-Hello
-<script>
-  alert("Hello!");
-</script>
+### Types of test generation
+
+* Code based
+* Model based
