@@ -229,5 +229,50 @@ produces
     ({"1st"}, {10}, 1), ({"1st", "2nd"}, {20, 30}, 1),
     ({"1st"}, {10}, 2), ({"1st", "2nd"}, {20, 30}, 2)
     
-    
-    
+---
+
+### Test template
+
+With the help of another type of generator (let's all it `TestTemplate`) we can generate arbitrary test functions.
+
+```c++
+int myfunc(int x) {
+  return 2*(x + 1);
+}
+
+void run_myfunc(const Inputs &inp, Outputs &out) {
+  int x = inp["x"];
+  out["y"] = myfunc(x);
+}
+
+void generate_test() {
+  Generator gen(run_myfunc, "run_myfunc", "myfunc");
+  gen.addInput("x", new IntList({1, 2}));
+  gen.addOutput("y", new IntOutput);
+
+  TestTemplate t;
+  t.addInput("x", "int", "");
+  t.addOutput("y", "int", "");
+  t.call("int y = myfunc(x)");
+  std::cerr << gen.generateFromTemplate(t) << std::endl;
+}
+```
+
+---
+
+### Generated tests
+
+```c++
+void test_myfunc_1() {
+  int x = 1;
+  int y = myfunc(x);
+  TS_ASSERT_EQUALS(y, 4);
+}
+
+void test_myfunc_2() {
+  int x = 2;
+  int y = myfunc(x);
+  TS_ASSERT_EQUALS(y, 6);
+}
+```
+
