@@ -29,3 +29,16 @@
 1. Compile the generating code.
 1. Run the generator, save the generated tests.
 1. Compile the tests.
+
+### Function executing code to be tested...
+
+... can be generically defined as:
+
+```c++
+void run(const Inputs& inp, Outputs &out) {
+  // ... set inputs provided by inp
+  // ... run the tested code
+  // ... pass outputs to out
+}
+```
+
