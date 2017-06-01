@@ -44,3 +44,30 @@ void run(const Inputs& inp, Outputs &out) {
 }
 ```
 
+---
+
+### Simple example
+
+```c++
+// Tested code
+double mysqrt(double x) {
+  if (x < 0.0) {
+    throw std::runtime_error("Negative argument");
+  }
+  return sqrt(x);
+}
+
+// Function that executes the tested code
+void run_mysqtr(const Inputs &inp, Outputs &out) {
+  double x = inp["x"];
+  double y = mysqrt(x);
+  out["y"] = y;
+}
+// Test generator
+void generate_test() {
+  Generator gen(run_mysqtr, "run_mysqtr");
+  gen.addInputShared("x", new DoubleList({2, -1}));
+  gen.addOutputUnique("y", new DoubleOutput);
+  gen.generate();
+}
+```
