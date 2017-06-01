@@ -30,6 +30,8 @@
 1. Run the generator, save the generated tests.
 1. Compile the tests.
 
+---
+
 ### Function executing code to be tested...
 
 ... can be generically defined as:
