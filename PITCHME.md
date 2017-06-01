@@ -46,7 +46,7 @@ void run(const Inputs& inp, Outputs &out) {
 
 ---
 
-### Simple example
+### Simple example: generator
 
 ```c++
 // Tested code
@@ -71,3 +71,31 @@ void generate_test() {
   gen.generate();
 }
 ```
+
+---
+
+### Simple example: generated test
+
+```c++
+Outputs out;
+out.add("y", new DoubleOutput);
+
+Generator gen;
+gen.addInput("x", new DoubleList({2, -1}));
+{ // test 1
+  Inputs inp = gen.getInputs();
+  // inp["x"] = 2;
+  run_mysqtr(inp, out);
+  TS_ASSERT_EQUALS(out["y"], 1.4142135623730951e+00);
+  gen.next();
+}
+
+{ // test 2
+  Inputs inp = gen.getInputs();
+  // inp["x"] = -1;
+  // error: Negative argument std::runtime_error
+  TS_ASSERT_THROWS(run_mysqtr(inp, out), std::runtime_error);
+  gen.next();
+}
+```
+
