@@ -174,3 +174,30 @@ void run_mysqtr(const Inputs &inp, Outputs &out) {
   gen.next();
 }
 ```
+
+---
+
+### Input generation: direct product
+
+Multiple inputs can be combined in all combinations. Setting
+
+```c++
+  Generator gen;
+  gen.setInputGenerationMethod(InputGenerator::DirectProduct);
+  gen.addInput("a", new IntList({1, 2}));
+  gen.addInput("b", new IntList({-1, -2}));
+```
+will produce all pairs of `a` and `b`:
+
+    // inp["a"] = 1;
+    // inp["b"] = -1;
+    ...
+    // inp["a"] = 2;
+    // inp["b"] = -1;
+    ...
+    // inp["a"] = 1;
+    // inp["b"] = -2;
+    ...
+    // inp["a"] = 2;
+    // inp["b"] = -2;
+
