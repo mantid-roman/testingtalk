@@ -313,3 +313,159 @@ test:
               x: [5, 4, 3]
           outputs: [y] 
 ```
+
+---
+
+### Generating code
+
+```python
+gen = PyGenerator(template=yaml.load(template))
+suite = gen.generate_test_suite()
+formatter = PyGenerator.FormatterClass()
+formatter.add_code(suite)
+tests = formatter.make_output()
+```
+
+---
+
+### Generated tests
+
+```python
+import unittest
+class Testmy_test(unittest.TestCase):
+    def test_one(self):
+        import math
+        x = 1
+        y = math.sqrt(x)
+        self.assertEqual(y, 1.0)
+    def test_one_1(self):
+        import math
+        x = 2
+        y = math.sqrt(x)
+        self.assertEqual(y, 1.4142135623730951)
+    def test_one_2(self):
+        import math
+        x = 3
+        y = math.sqrt(x)
+        self.assertEqual(y, 1.7320508075688772)
+    def test_two(self):
+        import math
+        x = 5
+        y = math.sqrt(x)
+        self.assertEqual(y, 2.23606797749979)
+    def test_two_1(self):
+        import math
+        x = 4
+        y = math.sqrt(x)
+        self.assertEqual(y, 2.0)
+    def test_two_2(self):
+        import math
+        x = 3
+        y = math.sqrt(x)
+        self.assertEqual(y, 1.7320508075688772)
+```
+
+---
+
+### Exceptions
+
+```yaml
+run: y = math.sqrt(x)
+cases:
+    - name: must_be_positive
+      inputs:
+          x: [-3]
+```
+
+---
+
+### Generated test
+
+```python
+def test_must_be_positive(self):
+    import math
+    x = -3
+    def run():
+        y = math.sqrt(x)
+    self.assertRaises(ValueError, run)
+```
+
+---
+
+### Exceptions improved
+
+```yaml
+run:
+    call: math.sqrt
+    args: [x]
+    returns: [y]
+cases:
+    - name: must_be_positive
+      inputs:
+          x: [-3]
+```
+
+---
+
+### Generated test
+
+```python
+def test_must_be_positive(self):
+    import math
+    x = -3
+    self.assertRaises(ValueError, math.sqrt, x)
+```
+
+---
+
+### Test Mantid algorithm
+
+---
+
+### Template
+
+```yaml
+test:
+    name: Rebin
+    begin: |
+        from mantid.simpleapi import *
+        from mantid.testing import workspace_helper
+        algorithm = AlgorithmManager.create('Rebin')
+    inputs:
+        - name: InputWorkspace
+          type: str
+          code: |
+              input = workspace_helper.create($value)
+              algorithm.setProperty('InputWorkspace', input)
+        - name: Params
+          type: list(float)
+          code: |
+              params_str = ','.join([str(p) for p in Params])
+              algorithm.setProperty('Params', params_str)
+        - names: [PreserveEvents, FullBinsOnly, IgnoreBinErrors]
+          type: bool
+          code: |
+              algorithm.setProperty($qname, $value)
+    outputs:
+        - name: x_bins
+          type: list(float)
+          code:
+              x_bins = output.readX(0)
+        - name: y_bins
+          type: list(float)
+          code:
+              y_bins = output.readY(0)
+    run: |
+        algorithm.execute()
+        output = algorithm.getProperty('OutputWorkspace')
+    cases:
+        - name: one
+          inputs:
+              InputWorkspace: [Good, Empty, Bad]
+              Params: [[10, 0.1, 20], [10, -0.1, 20]]
+              PreserveEvents: [False, True]
+              FullBinsOnly: [False, True]
+              IgnoreBinErrors: [False, True]
+          outputs: [x_bins, y_bins]
+```
+
