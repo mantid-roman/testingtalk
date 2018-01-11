@@ -1,4 +1,4 @@
-# Testing
+# Testing-2
 
 ---
 
@@ -274,3 +274,14 @@ void test_myfunc_2() {
 
 ## Writing generators is annoying.
 ## Can we generate them?..
+
+---
+
+### YAML templates
+
+* Further reduce amouunt of manual work
+* Use python for test generation
+* Can generate tests for variety of target languages
+* Really easy to generate tests for python code
+
+---
