@@ -11,6 +11,7 @@
 
 1. Prepare the inputs
 1. Pass the inputs to the tested object
+1. Run executable code of the tested object
 1. Get the outputs from the tested object
 1. Compare the outputs with "correct" values
 
@@ -285,3 +286,30 @@ void test_myfunc_2() {
 * Really easy to generate tests for python code
 
 ---
+
+### Example
+
+```yaml
+config:
+    target_test_file: test.py
+test:
+    name: my_test
+    begin: import math
+    inputs:
+        - name: x
+          type: float
+          default: 0
+    outputs:
+        - name: y
+          type: float
+    run: y = math.sqrt(x)
+    cases:
+        - name: one
+          inputs:
+              x: [1, 2, 3]
+          outputs: [y] 
+        - name: two
+          inputs:
+              x: [5, 4, 3]
+          outputs: [y] 
+```
