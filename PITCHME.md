@@ -418,6 +418,20 @@ def test_must_be_positive(self):
 
 ---
 
+### Pre- and Postconditions
+
+```yaml
+run: y = math.sqrt(x)
+pre:
+    assert: x >= 0
+    message: x must be positive
+post:
+    assert: math.abs(x - y**2) <= 1e-15
+    message: y**2 != x
+```
+
+---
+
 ### Test Mantid algorithm
 
 ---
@@ -505,3 +519,7 @@ cases:
             b: [...]
         outputs: [B1, B2, ...]
 ```
+
+---
+
+## Can templates be generated?
