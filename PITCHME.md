@@ -434,10 +434,6 @@ post:
 
 ### Test Mantid algorithm
 
----
-
-### Template
-
 ```yaml
 test:
     name: Rebin
