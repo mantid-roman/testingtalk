@@ -469,3 +469,39 @@ test:
           outputs: [x_bins, y_bins]
 ```
 
+---
+
+### Using definitions
+
+```yaml
+config:
+    defs:
+        Data1: [1, 2, 3, ...]
+        Data2: [10, 20, 30, ...]
+test:
+    cases:
+        - name: one
+            inputs:
+                x: [$Data1, $Data2]
+```
+
+---
+
+### Extending test cases
+
+```yaml
+cases:
+    - name: base
+        inputs:
+            x: [$Data1, $Data2]
+    - name: extended a
+      extends: base
+        inputs:
+            a: [...]
+        outputs: [A1, A2, ...]
+    - name: extended b
+      extends: base
+        inputs:
+            b: [...]
+        outputs: [B1, B2, ...]
+```
